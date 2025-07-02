@@ -1,5 +1,6 @@
-import '../src/index.css'
 import { HamburgerTwo } from '../src/index.js'
+import '../src/index.css'
+import './style.css'
 
 HamburgerTwo.define()
 

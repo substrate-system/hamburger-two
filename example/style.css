@@ -1,0 +1,10 @@
+body {
+    background-color: pink;
+    min-height: 200vh;
+}
+
+@media (width < 680px) {
+    .hamburger-wrapper {
+        display: block;
+    }
+}

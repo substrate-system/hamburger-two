@@ -1,33 +1,3 @@
-/**
- * Don't show until JS is instantiated.
- */
-hamburger-two {
-    &:not(:defined) {
-        display: none;
-    }
-}
-
-.hamburger-wrapper {
-    display: none;
-    position: absolute;
-    margin-left: auto;
-    width: 10%;
-    justify-self: right;
-    right: 1rem;
-    top: 12px;
-    text-align: right;
-
-    &.open {
-        top: 0;
-
-        & .burger {
-            & .line {
-                background-color: white;
-            }
-        }
-    }
-}
-
 .hamburger {
     display: inline-block;
 
@@ -55,6 +25,20 @@ hamburger-two {
         &.bottom {
             transform: translateY(6px) scaleX(.88);
         }
+    }
+    
+    & button {
+        all: unset;
+        cursor: pointer;
+        display: block;
+    }
+    
+    & button * {
+        pointer-events: none;
+    }
+    
+    & input {
+        display: none;
     }
 
     & .burger {
@@ -112,24 +96,25 @@ hamburger-two {
             }
         }
     }
-    
-    & button {
-        all: unset;
-        cursor: pointer;
-        display: block;
-    }
-    
-    & button * {
-        pointer-events: none;
-    }
-    
-    & input {
-        display: none;
-    }
 }
 
-@media (width < 600px) {
-    .hamburger-wrapper {
-        display: block;
+.hamburger-wrapper {
+    display: none;
+    position: absolute;
+    margin-left: auto;
+    width: 10%;
+    justify-self: right;
+    right: 1rem;
+    top: 12px;
+    text-align: right;
+
+    &.open {
+        top: 0;
+
+        & .burger {
+            & .line {
+                background-color: white;
+            }
+        }
     }
 }
