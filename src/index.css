@@ -1,0 +1,10 @@
+/**
+ * Don't show until JavaScript is instantiated
+ */
+{{component-name}}:not(:defined) {
+	display: none;
+}
+
+{{component-name}} {
+    background-color: red;
+}
