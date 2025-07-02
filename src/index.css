@@ -1,3 +1,13 @@
+:root {
+    --burger-open-color: black;
+}
+
+@supports (scrollbar-gutter:stable) {
+    .sl-scroll-lock body {
+        overflow: hidden !important;
+    }
+}
+
 .hamburger {
     display: inline-block;
 
@@ -105,7 +115,7 @@
     width: 10%;
     justify-self: right;
     right: 1rem;
-    top: 12px;
+    top: 16px;
     text-align: right;
 
     &.open {
@@ -113,7 +123,7 @@
 
         & .burger {
             & .line {
-                background-color: white;
+                background-color: var(--burger-open-color, white)
             }
         }
     }

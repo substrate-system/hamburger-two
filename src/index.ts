@@ -2,6 +2,7 @@ import {
     lockBodyScrolling,
     unlockBodyScrolling
 } from '@substrate-system/util/scroll'
+import { WebComponent } from '@substrate-system/web-component'
 import { createDebug } from '@substrate-system/debug'
 const debug = createDebug()
 
@@ -12,13 +13,9 @@ declare global {
     }
 }
 
-export class HamburgerTwo extends HTMLElement {
+export class HamburgerTwo extends WebComponent {
     static TAG = 'hamburger-two'
     static observedAttributes = ['open']
-
-    static define<T extends { new (...args:any[]):HamburgerTwo; TAG:string }>(this:T) {
-        define(this.TAG, this)
-    }
 
     get isOpen ():boolean {
         return this.hasAttribute('open')
@@ -27,11 +24,19 @@ export class HamburgerTwo extends HTMLElement {
     set isOpen (value:boolean) {
         const els = this.getElements()
         if (!value) {
+            // closed
+            document.body.classList.remove('hamburging')
+            this.classList.remove('open')
             this.removeAttribute('open')
             els.forEach(el => el?.classList.remove('open'))
+            unlockBodyScrolling(document.body)
         } else {
+            // open
+            document.body.classList.add('hamburging')
+            this.classList.add('open')
             this.setAttribute('open', '')
             els.forEach(el => el?.classList.add('open'))
+            lockBodyScrolling(document.body)
         }
     }
 
@@ -59,43 +64,13 @@ export class HamburgerTwo extends HTMLElement {
         }
     }
 
-    clicker () {
-        this.querySelector('label')?.addEventListener('click', () => {
-            this.hamburgle()
-        })
+    /**
+     * The work happens in the setter method.
+     */
+    hamburgle (ev?:Event) {
+        if (ev) ev.preventDefault()
 
-        this.querySelector('button')?.addEventListener('click', () => {
-            this.hamburgle()
-        })
-    }
-
-    open () {
-        this.classList.add('open')
-    }
-
-    close () {
-        this.classList.remove('open')
-    }
-
-    hamburgle () {
-        this.isOpen = !this.isOpen
-
-        if (this.isOpen) {
-            this.open()
-        } else {
-            this.close()
-        }
-
-        // no scrolling when menu is open
-        if (!this.isOpen) {
-            // closed
-            document.body.classList.remove('hamburging')
-            unlockBodyScrolling(document.body)
-        } else {
-            // is open
-            document.body.classList.add('hamburging')
-            lockBodyScrolling(document.body)
-        }
+        this.isOpen = !(this.isOpen)
     }
 
     /**
@@ -110,29 +85,15 @@ export class HamburgerTwo extends HTMLElement {
     handleChange_open (oldValue:string, newValue:string) {
         if (newValue === oldValue) return
 
-        debug('handling the change... old value', oldValue)
-        debug('handling the change... new value', newValue)
-
         if (newValue === null) {
             // closed
+            debug('closed')
             this.isOpen = false
         } else {
             // open
+            debug('open')
             this.isOpen = true
         }
-    }
-
-    /**
-     * Runs when the value of any attribute is changed, which delegates
-     * to `handeChange_name`.
-     *
-     * @param  {string} name     The attribute name
-     * @param  {string} oldValue The old attribute value
-     * @param  {string} newValue The new attribute value
-     */
-    attributeChangedCallback (name:string, oldValue:string, newValue:string) {
-        const handler = this[`handleChange_${name}`];
-        (handler && handler.call(this, oldValue, newValue))
     }
 
     disconnectedCallback () {
@@ -146,7 +107,15 @@ export class HamburgerTwo extends HTMLElement {
         debug('connected')
 
         this.render()
-        this.clicker()
+        this.addEventListener('click', ev => {
+            ev.preventDefault()
+            debug('clicked!!!!!!!!!!!!!!!')
+            this.hamburgle()
+        })
+        // this.querySelector('label')?.addEventListener('click', this.hamburgle)
+        // this.getElements().forEach(el => {
+        //     el?.addEventListener('click', this.hamburgle.bind(this))
+        // })
     }
 
     render () {

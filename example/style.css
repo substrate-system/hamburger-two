@@ -3,6 +3,14 @@ body {
     min-height: 200vh;
 }
 
+.content {
+    margin-top: 180vh;
+}
+
+.more-content {
+    margin-top: 40vh;
+}
+
 @media (width < 680px) {
     .hamburger-wrapper {
         display: block;
