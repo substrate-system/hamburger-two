@@ -3,7 +3,19 @@
 }
 
 @supports (scrollbar-gutter:stable) {
+    .sl-scroll-lock {
+        scrollbar-gutter: var(--sl-scroll-lock-gutter) !important;
+    }
+  
     .sl-scroll-lock body {
+        overflow: hidden !important;
+    }
+}
+
+/** This can go away once Safari has scrollbar-gutter support. */
+@supports not (scrollbar-gutter: stable) {
+    .sl-scroll-lock body {
+        padding-right: var(--sl-scroll-lock-size) !important;
         overflow: hidden !important;
     }
 }

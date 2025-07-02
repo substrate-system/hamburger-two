@@ -13,7 +13,7 @@ declare global {
     }
 }
 
-export class HamburgerTwo extends WebComponent {
+export class HamburgerTwo extends WebComponent.create('hamburger-two') {
     static TAG = 'hamburger-two'
     static observedAttributes = ['open']
 
@@ -23,6 +23,8 @@ export class HamburgerTwo extends WebComponent {
 
     set isOpen (value:boolean) {
         const els = this.getElements()
+        if (this.isOpen === value) return
+
         if (!value) {
             // closed
             document.body.classList.remove('hamburging')
@@ -30,6 +32,7 @@ export class HamburgerTwo extends WebComponent {
             this.removeAttribute('open')
             els.forEach(el => el?.classList.remove('open'))
             unlockBodyScrolling(document.body)
+            this.emit('close')
         } else {
             // open
             document.body.classList.add('hamburging')
@@ -37,6 +40,7 @@ export class HamburgerTwo extends WebComponent {
             this.setAttribute('open', '')
             els.forEach(el => el?.classList.add('open'))
             lockBodyScrolling(document.body)
+            this.emit('open')
         }
     }
 
@@ -58,10 +62,7 @@ export class HamburgerTwo extends WebComponent {
             this.transition = parseInt(transition)
         }
 
-        const open = this.getAttribute('open')
-        if (open !== null) {
-            this.isOpen = true
-        }
+        this.isOpen = this.hasAttribute('open')
     }
 
     /**
@@ -69,7 +70,6 @@ export class HamburgerTwo extends WebComponent {
      */
     hamburgle (ev?:Event) {
         if (ev) ev.preventDefault()
-
         this.isOpen = !(this.isOpen)
     }
 
@@ -87,11 +87,9 @@ export class HamburgerTwo extends WebComponent {
 
         if (newValue === null) {
             // closed
-            debug('closed')
             this.isOpen = false
         } else {
             // open
-            debug('open')
             this.isOpen = true
         }
     }
@@ -104,18 +102,11 @@ export class HamburgerTwo extends WebComponent {
      * Create DOM and listen for events.
      */
     connectedCallback () {
-        debug('connected')
-
         this.render()
         this.addEventListener('click', ev => {
             ev.preventDefault()
-            debug('clicked!!!!!!!!!!!!!!!')
             this.hamburgle()
         })
-        // this.querySelector('label')?.addEventListener('click', this.hamburgle)
-        // this.getElements().forEach(el => {
-        //     el?.addEventListener('click', this.hamburgle.bind(this))
-        // })
     }
 
     render () {
