@@ -1,6 +1,8 @@
 import '../src/index.css'
-import '../src/index.js'
+import { HamburgerTwo } from '../src/index.js'
+
+HamburgerTwo.define()
 
 document.body.innerHTML += `
-    <{{component-name}}></{{component-name}}>
+    <hamburger-two></hamburger-two>
 `

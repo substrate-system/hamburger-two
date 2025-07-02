@@ -1,33 +1,64 @@
+import {
+    lockBodyScrolling,
+    unlockBodyScrolling
+} from '@substrate-system/util/scroll'
 import { createDebug } from '@substrate-system/debug'
 const debug = createDebug()
 
 // for docuement.querySelector
 declare global {
     interface HTMLElementTagNameMap {
-        '{{component-name}}': Example
+        'hamburger-two': HamburgerTwo
     }
 }
 
-export class Example extends HTMLElement {
-    // Define the attributes to observe
-    // need this for `attributeChangedCallback`
-    static observedAttributes = ['example']
+export class HamburgerTwo extends HTMLElement {
+    static TAG = 'hamburger-two'
+    static observedAttributes = ['open']
 
-    example:string|null
+    static define<T extends { new (...args:any[]):HamburgerTwo; TAG:string }>(this:T) {
+        define(this.TAG, this)
+    }
+
+    transition:number = 200
+
+    get isOpen ():boolean {
+        return this.hasAttribute('open')
+    }
+
+    set isOpen (value:boolean) {
+        if (!value) {
+            this.removeAttribute('open')
+        } else {
+            this.setAttribute('open', '')
+        }
+    }
 
     constructor () {
         super()
-        const example = this.getAttribute('example')
-        this.example = example
 
-        this.innerHTML = `<div>
-            <p>example</p>
-            <ul>
-                ${Array.from(this.children).filter(Boolean).map(node => {
-                    return `<li>${node.outerHTML}</li>`
-                }).join('')}
-            </ul>
-        </div>`
+        const transition = this.getAttribute('transition')
+        if (transition) {
+            this.transition = parseInt(transition)
+        }
+
+        const open = this.getAttribute('open')
+        if (open !== null) {
+            this.isOpen = true
+        }
+    }
+
+    hamburgle () {
+        this.isOpen = !this.isOpen
+
+        // no scrolling when menu is open
+        if (!this.isOpen) {
+            document.body.classList.remove('hamburging')
+            unlockBodyScrolling(document.body)
+        } else {
+            document.body.classList.add('hamburging')
+            lockBodyScrolling(document.body)
+        }
     }
 
     /**
@@ -37,13 +68,15 @@ export class Example extends HTMLElement {
      * @param  {string} oldValue The old attribute value
      * @param  {string} newValue The new attribute value
      */
-    handleChange_example (oldValue:string, newValue:string) {
-        debug('handling example change', oldValue, newValue)
+    handleChange_open (oldValue:string, newValue:string) {
+        debug('handling open change', oldValue, newValue)
+
+        if (newValue === oldValue) return
 
         if (newValue === null) {
-            // [example] was removed
+            this.isOpen = false
         } else {
-            // set [example] attribute
+            this.isOpen = true
         }
     }
 
@@ -65,34 +98,65 @@ export class Example extends HTMLElement {
         debug('disconnected')
     }
 
+    /**
+     * Create DOM and listen for events.
+     */
     connectedCallback () {
         debug('connected')
 
-        const observer = new MutationObserver(function (mutations) {
-            mutations.forEach((mutation) => {
-                if (mutation.addedNodes.length) {
-                    debug('Node added: ', mutation.addedNodes)
-                }
-            })
+        this.render()
+
+        this.querySelector('button')?.addEventListener('click', ev => {
+            ev.preventDefault()
+            this.hamburgle()
         })
 
-        observer.observe(this, { childList: true })
-
-        this.render()
+        this.querySelector('label')?.addEventListener('click', ev => {
+            ev.preventDefault()
+            this.hamburgle()
+        })
     }
 
     render () {
-        this.innerHTML = `<div>
-            <p>example</p>
-            <ul>
-                ${Array.from(this.children).filter(Boolean).map(node => {
-                    return `<li>${node.outerHTML}</li>`
-                }).join('')}
-            </ul>
-        </div>`
+        const isOpen = this.isOpen
+
+        this.innerHTML = (`<div class="hamurger-wrapper">
+            <div class="${'hamburger' + (isOpen ? ' open' : '')}">
+                <input type="checkbox" id="burger-checkbox" checked=${isOpen} />
+                <label class="burger" for="burger-checkbox">
+                    <button>
+                        <div class="container top">
+                            <div class="line top"></div>
+                        </div>
+                        <div class="container middle">
+                            <div class="line middle"></div>
+                        </div>
+                        <div class="container bottom">
+                            <div class="line bottom"></div>
+                        </div>
+                    </button>
+                </label>
+            </div>
+        </div>`)
     }
 }
 
-if ('customElements' in window) {
-    customElements.define('{{component-name}}', Example)
+/**
+ * Check if the given tag name has been registered.
+ *
+ * @see {@link https://stackoverflow.com/a/28210364 stackoverflow}
+ * @param {string} elName The custom element tag name.
+ * @returns {boolean} True if the given name has been registered already.
+ */
+export function isRegistered (elName:string):boolean {
+    return document.createElement(elName).constructor !== window.HTMLElement
+}
+
+export function define (name:string, element:CustomElementConstructor) {
+    if (!window) return
+    if (!('customElements' in window)) return
+
+    if (!isRegistered(name)) {
+        window.customElements.define(name, element)
+    }
 }
