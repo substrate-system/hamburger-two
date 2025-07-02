@@ -70,8 +70,8 @@
     "tape-run": "^11.0.0",
     "typedoc": "^0.28.1",
     "typescript": "^5.7.3",
-    "vite": "^6.3.5",
-    "yargs": "^17.7.2"
+    "vite": "^7.0.0",
+    "yargs": "^18.0.0"
   },
   "author": "nichoth <nichoth@nichoth.com> (https://nichoth.com)",
   "license": "MIT"
