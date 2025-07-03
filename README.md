@@ -16,7 +16,8 @@ Hamburger menu
 
 - [Install](#install)
 - [Use](#use)
-  * [Example](#example)
+  * [events](#events)
+- [Example](#example)
 - [Modules](#modules)
   * [ESM](#esm)
   * [Common JS](#common-js)
