@@ -16,19 +16,18 @@ Hamburger menu
 
 ## install
 
-Installation instructions
-
 ```sh
 npm i -S @substrate-system/hamburger-two
 ```
 
-## API
+## Modules
 
-This exposes ESM and common JS via [package.json `exports` field](https://nodejs.org/api/packages.html#exports).
+This exposes ESM and common JS via
+[package.json `exports` field](https://nodejs.org/api/packages.html#exports).
 
 ### ESM
 ```js
-import '@substrate-system/hamburger-two'
+import { HamburgerTwo } from '@substrate-system/hamburger-two'
 ```
 
 ### Common JS
@@ -52,7 +51,7 @@ import '@substrate-system/hamburger-two/css/min'
 ### Customize CSS via some variables
 
 ```css
-my-hamburger-two {
+hamburger-two {
     --example: pink;
 }
 ```
@@ -69,7 +68,7 @@ import '@substrate-system/hamburger-two'
 ### HTML
 ```html
 <div>
-    <my-hamburger-two></my-hamburger-two>
+    <hamburger-two></hamburger-two>
 </div>
 ```
 
@@ -79,17 +78,17 @@ accessible to your web server, then link to them in HTML.
 
 #### copy
 ```sh
-cp ./node_modules/@substrate-system/hamburger-two/dist/index.min.js ./public/my-hamburger-two.min.js
-cp ./node_modules/@substrate-system/hamburger-two/dist/style.min.css ./public/my-hamburger-two.css
+cp ./node_modules/@substrate-system/hamburger-two/dist/index.min.js ./public/hamburger-two.min.js
+cp ./node_modules/@substrate-system/hamburger-two/dist/style.min.css ./public/hamburger-two.css
 ```
 
 #### HTML
 ```html
 <head>
-    <link rel="stylesheet" href="./my-hamburger-two.css">
+    <link rel="stylesheet" href="./hamburger-two.css">
 </head>
 <body>
     <!-- ... -->
-    <script type="module" src="./my-hamburger-two.min.js"></script>
+    <script type="module" src="./hamburger-two.min.js"></script>
 </body>
 ```

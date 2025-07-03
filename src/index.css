@@ -1,21 +1,21 @@
 :root {
-    --burger-open-color: black;
+    --burger-open-color: white;
 }
 
 @supports (scrollbar-gutter:stable) {
-    .sl-scroll-lock {
-        scrollbar-gutter: var(--sl-scroll-lock-gutter) !important;
+    .scroll-lock {
+        scrollbar-gutter: var(--scroll-lock-gutter) !important;
     }
   
-    .sl-scroll-lock body {
+    .scroll-lock body {
         overflow: hidden !important;
     }
 }
 
 /** This can go away once Safari has scrollbar-gutter support. */
 @supports not (scrollbar-gutter: stable) {
-    .sl-scroll-lock body {
-        padding-right: var(--sl-scroll-lock-size) !important;
+    .scroll-lock body {
+        padding-right: var(--scroll-lock-size) !important;
         overflow: hidden !important;
     }
 }

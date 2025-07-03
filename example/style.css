@@ -1,5 +1,4 @@
 body {
-    background-color: pink;
     min-height: 200vh;
 }
 
@@ -15,4 +14,15 @@ body {
     .hamburger-wrapper {
         display: block;
     }
+}
+
+.mobile-nav-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    left: 0;
+    opacity: .85;
+    position: fixed;
+    top: 0;
+    z-index: 97;
 }

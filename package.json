@@ -46,7 +46,7 @@
     }
   },
   "dependencies": {
-    "@substrate-system/util": "^0.1.34",
+    "@substrate-system/util": "^0.1.35",
     "@substrate-system/web-component": "^0.0.28"
   },
   "devDependencies": {
