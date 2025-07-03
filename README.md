@@ -8,9 +8,17 @@
 [![Common Changelog](https://nichoth.github.io/badge/common-changelog.svg)](./CHANGELOG.md)
 [![license](https://img.shields.io/badge/license-Big_Time-blue?style=flat-square)](LICENSE)
 
-Hamburger menu
+Another hamburger menu.
 
 [See a live demo](https://substrate-system.github.io/hamburger-two/)
+
+>
+> [!NOTE]  
+> In the example page, you must be in mobile view to see the component.
+>
+
+See [@substrate-system/hamburger](https://github.com/substrate-system/hamburger/)
+for something similar but with different style.
 
 <!-- toc -->
 
@@ -173,6 +181,22 @@ the close "x" button when the menu is open. Default is "white".
 :root {
     --burger-open-color: white;
 }
+```
+
+## test
+
+Run some tests locally with [tape-run](https://github.com/tape-testing/tape-run).
+
+```sh
+npm test
+```
+
+## develop
+
+Start a localhost server of the example page.
+
+```sh
+npm start
 ```
 
 ## See also

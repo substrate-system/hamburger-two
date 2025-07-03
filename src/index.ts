@@ -112,10 +112,6 @@ export class HamburgerTwo extends WebComponent.create('hamburger-two') {
     render () {
         const isOpen = this.isOpen
 
-        // ${Array.from(this.children).filter(Boolean).map(node => {
-        //     return `<li>${node.outerHTML}</li>`
-        // }).join('')}
-
         this.burgerIcon = `<label class="burger" for="burger-checkbox">
             <button>
                 <div class="container top">
