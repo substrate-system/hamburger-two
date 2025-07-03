@@ -32,7 +32,7 @@
     }
 
     & .container {
-        transition: transform 0.2s ease-in-out 0.1s;
+        transition: transform 0.2s ease-in-out;
         position: absolute;
         left: 5px;
 

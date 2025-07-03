@@ -1,7 +1,7 @@
 import {
     lockBodyScrolling,
     unlockBodyScrolling
-} from '@substrate-system/util/scroll'
+} from '@substrate-system/scroll-lock'
 import { WebComponent } from '@substrate-system/web-component'
 import { createDebug } from '@substrate-system/debug'
 const debug = createDebug()
