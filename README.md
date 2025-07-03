@@ -8,7 +8,7 @@
 [![Common Changelog](https://nichoth.github.io/badge/common-changelog.svg)](./CHANGELOG.md)
 [![license](https://img.shields.io/badge/license-Big_Time-blue?style=flat-square)](LICENSE)
 
-Another hamburger menu.
+Another hamburger menu, as a [web component](https://developer.mozilla.org/en-US/docs/Web/API/Web_components).
 
 [See a live demo](https://substrate-system.github.io/hamburger-two/)
 
