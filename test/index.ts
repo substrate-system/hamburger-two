@@ -1,12 +1,12 @@
 import { test } from '@substrate-system/tapzero'
 import { HamburgerTwo } from '../src/index.js'
+HamburgerTwo.define()
 
 test('example test', async t => {
     t.plan(3)
 
     document.body.innerHTML += `
-        <hamburger-two class="test">
-        </hamburger-two>
+        <hamburger-two class="test"></hamburger-two>
     `
 
     const el = document.querySelector('hamburger-two')!
@@ -19,9 +19,5 @@ test('example test', async t => {
 
     el.isOpen = true
 
-    console.log('elllll', JSON.stringify(Array.from(el.attributes), null, 2))
-
-    setTimeout(() => {
-        t.ok(el.hasAttribute('open'), 'should set the attribute')
-    }, 10)
+    t.ok(el.hasAttribute('open'), 'should set the attribute')
 })
