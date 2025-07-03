@@ -20,6 +20,8 @@ Another hamburger menu, as a [web component](https://developer.mozilla.org/en-US
 See [@substrate-system/hamburger](https://github.com/substrate-system/hamburger/)
 for something similar but with different style.
 
+<details><summary><h2>Contents</h2></summary>
+
 <!-- toc -->
 
 - [Install](#install)
@@ -38,6 +40,9 @@ for something similar but with different style.
 - [See also](#see-also)
 
 <!-- tocstop -->
+
+</details>
+
 
 ## Install
 
