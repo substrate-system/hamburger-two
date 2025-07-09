@@ -26,6 +26,8 @@ for something similar but with different style.
 
 - [Install](#install)
 - [Use](#use)
+  * [HTML](#html)
+  * [Javascript](#javascript)
   * [CSS](#css)
   * [events](#events)
 - [Example](#example)
