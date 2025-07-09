@@ -3,8 +3,6 @@ import {
     unlockBodyScrolling
 } from '@substrate-system/scroll-lock'
 import { WebComponent } from '@substrate-system/web-component'
-import { createDebug } from '@substrate-system/debug'
-const debug = createDebug()
 
 // for docuement.querySelector
 declare global {
@@ -92,10 +90,6 @@ export class HamburgerTwo extends WebComponent.create('hamburger-two') {
             // open
             this.isOpen = true
         }
-    }
-
-    disconnectedCallback () {
-        debug('disconnected')
     }
 
     /**
