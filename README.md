@@ -65,6 +65,49 @@ import { HamburgerTwo } from '@substrate-system/hamburger-two'
 import '@substrate-system/hamburger-two/css'
 
 HamburgerTwo.define()
+
+// tag name is exposed as .TAG
+const el = document.querySelector(HamburgerTwo.TAG)
+
+// programmatically open the menu
+el?.isOpen = true
+
+// listen for events, then change the class on our navigation element
+el?.addEventListener(HamburgerTwo.event('open'), () => {
+    debug('menu is open...')
+    document.querySelector('.mobile-nav-menu')!.classList.add('open')
+})
+
+el?.addEventListener(HamburgerTwo.event('close'), () => {
+    debug('menu is closed...')
+    document.querySelector('.mobile-nav-menu')!.classList.remove('open')
+})
+```
+
+### CSS
+
+Only display on small screens. This needs to be part of the application code;
+it is not in this library.
+
+```css
+hamburger-two {
+    display: none;
+}
+
+/* show/hide our menu */
+.mobile-nav-menu {
+    display: none;
+
+    &.open {
+        display: flex;
+    }
+}
+
+@media (width < 680px) {
+    hamburger-two {
+        display: block;
+    }
+}
 ```
 
 ### events
@@ -181,12 +224,13 @@ import '@substrate-system/hamburger-two/css/min'
 
 ### Customize CSS via variables
 
-You can redefine the variable `--burger-open-color`. This sets the color of
+You can redefine some CSS variables. `--burger-open-color` sets the color of
 the close "x" button when the menu is open. Default is "white".
 
 ```css
 :root {
     --burger-open-color: white;
+    --fade-in-time: 0.4s;
 }
 ```
 

@@ -10,8 +10,12 @@ body {
     margin-top: 40vh;
 }
 
+hamburger-two {
+    display: none;
+}
+
 @media (width < 680px) {
-    .hamburger-wrapper {
+    hamburger-two {
         display: block;
     }
 }

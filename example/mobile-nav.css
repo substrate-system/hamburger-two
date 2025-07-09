@@ -55,12 +55,12 @@
     }
 
     &.open {
+        display: flex;
         z-index: 97;
         opacity: 0.85;
         position: fixed;
         top: 0;
         left: 0;
-        display: flex;
         flex-direction: column;
         justify-content: space-around;
 

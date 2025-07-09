@@ -2,7 +2,7 @@ import { test } from '@substrate-system/tapzero'
 import { HamburgerTwo } from '../src/index.js'
 HamburgerTwo.define()
 
-test('example test', async t => {
+test('Hamburger', async t => {
     t.plan(3)
 
     document.body.innerHTML += `
@@ -17,6 +17,7 @@ test('example test', async t => {
         t.ok(ev, 'should emit "open" event')
     })
 
+    // setting this opens the menu, emits the event
     el.isOpen = true
 
     t.ok(el.hasAttribute('open'), 'should set the attribute')

@@ -22,7 +22,7 @@ export class HamburgerTwo extends WebComponent.create('hamburger-two') {
     }
 
     set isOpen (value:boolean) {
-        const els = this.getElements()
+        const els = this._getElements()
         if (this.isOpen === value) return
 
         if (!value) {
@@ -44,7 +44,7 @@ export class HamburgerTwo extends WebComponent.create('hamburger-two') {
         }
     }
 
-    getElements () {
+    _getElements () {
         return [
             this.querySelector('.hamburger-wrapper'),
             this.querySelector('.hamburger')
