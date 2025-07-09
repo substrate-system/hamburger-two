@@ -87,7 +87,7 @@ el?.addEventListener(HamburgerTwo.event('close'), () => {
 
 ### CSS
 
-Only display on small screens. This needs to be part of the application code;
+Only display on small screens. **This needs to be part of the application code**;
 it is not in this library.
 
 ```css
