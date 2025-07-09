@@ -7,10 +7,6 @@ const debug = Debug()
 
 HamburgerTwo.define()
 
-document.body.innerHTML += `
-    <hamburger-two></hamburger-two>
-`
-
 const el = document.querySelector('hamburger-two')
 
 el?.addEventListener(HamburgerTwo.event('open'), () => {

@@ -61,6 +61,24 @@ Import, then call `.define` to register the element with the default tag name,
 > rendering, because this element is only useful on the client-side.
 >
 
+### HTML
+
+Application code should listen for hamburger events, and show/hide the menu.
+
+```html
+    <hamburger-two></hamburger-two>
+
+    <div class="mobile-nav-menu">
+        <ul>
+          <li><a href="/hello">hello</a></li>
+          <li><a href="/abc">abc</a></li>
+          <li><a href="/def">def</a></li>
+        </ul>
+    </div>
+```
+
+### Javascript
+
 ```js
 import { HamburgerTwo } from '@substrate-system/hamburger-two'
 import '@substrate-system/hamburger-two/css'
