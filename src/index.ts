@@ -107,7 +107,7 @@ export class HamburgerTwo extends WebComponent.create('hamburger-two') {
         const isOpen = this.isOpen
 
         this.burgerIcon = `<label class="burger" for="burger-checkbox">
-            <button>
+            <button name="open-nav">
                 <div class="container top">
                     <div class="line top"></div>
                 </div>
