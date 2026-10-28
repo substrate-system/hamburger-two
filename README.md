@@ -32,6 +32,8 @@ for something similar but with different style.
   * [HTML](#html)
   * [Javascript](#javascript)
   * [CSS](#css)
+  * [Attributes](#attributes)
+  * [Accessibility](#accessibility)
   * [events](#events)
 - [Example](#example)
 - [Modules](#modules)
@@ -70,11 +72,12 @@ Just import; the library code calls `window.customElements.define`.
 ### HTML
 
 Application code should listen for hamburger events, and show/hide the menu.
+Pass the menu's `id` as the `controls` attribute.
 
 ```html
-    <hamburger-two></hamburger-two>
+    <hamburger-two controls="mobile-nav"></hamburger-two>
 
-    <div class="mobile-nav-menu">
+    <div id="mobile-nav" class="mobile-nav-menu">
         <ul>
           <li><a href="/hello">hello</a></li>
           <li><a href="/abc">abc</a></li>
@@ -137,6 +140,27 @@ hamburger-two {
     }
 }
 ```
+
+### Attributes
+
+* `controls` -- the `id` of the menu element. It becomes `aria-controls`
+  on the button, and the element moves focus into that menu on open.
+* `label` -- the accessible name of the button. Default is `"Menu"`.
+* `open` -- present when the menu is open. Add or remove it to open or
+  close the menu; this emits the matching event.
+
+### Accessibility
+
+The element renders a single `<button>` with `aria-label`,
+`aria-expanded`, and `aria-controls`.
+
+* Clicking the button emits `open` first, so the app can show the menu,
+  then moves focus to the first focusable element in the `controls` menu.
+  Opening by setting `isOpen` or the `open` attribute does not move focus.
+* Pressing Escape while open closes the menu and returns focus to the
+  button.
+* Moving focus from the menu to an element outside of the menu and the
+  hamburger closes the menu.
 
 ### events
 
@@ -253,15 +277,29 @@ import '@substrate-system/hamburger-two/css/min'
 
 ### Customize CSS via variables
 
-You can redefine some CSS variables. `--burger-open-color` sets the color of
-the close "x" button when the menu is open. Default is "white".
+The element uses the shared `--substrate-*` variables, each with a
+fallback:
+
+* `--substrate-text` -- the color of the lines. Default `black` when
+  closed and `white` when open.
+* `--substrate-focus` -- the focus ring color. Default `Highlight`.
+* `--substrate-focus-width` -- the focus ring width. Default `2px`.
+* `--substrate-radius` -- the corner radius of the button, which shapes
+  the focus ring. Default `0`.
+
+Two more variables override `--substrate-text` for this element only.
+`--hamburger-color` sets the color of the lines when closed, and
+`--burger-open-color` sets the color of the close "x" when open.
 
 ```css
 :root {
+    --substrate-text: #222;
+    --substrate-focus: #0055d4;
     --burger-open-color: white;
-    --fade-in-time: 0.4s;
 }
 ```
+
+The line animation is off when the user prefers reduced motion.
 
 ## test
 

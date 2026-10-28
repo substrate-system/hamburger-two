@@ -12,35 +12,47 @@ declare global {
     }
 }
 
+const FOCUSABLE = [
+    'a[href]',
+    'button:not([disabled])',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])'
+].join(', ')
+
 export class HamburgerTwo extends WebComponent.create('hamburger-two') {
     static TAG = 'hamburger-two'
-    static observedAttributes = ['open']
+    static observedAttributes = ['open', 'label', 'controls']
+    static DEFAULT_LABEL = 'Menu'
 
     get isOpen ():boolean {
         return this.hasAttribute('open')
     }
 
+    /**
+     * Set or remove the `open` attribute. The work happens in
+     * `handleChange_open`.
+     */
     set isOpen (value:boolean) {
-        const els = this._getElements()
-        if (this.isOpen === value) return
+        this.toggleAttribute('open', value)
+    }
 
-        if (!value) {
-            // closed
-            document.body.classList.remove('hamburging')
-            this.classList.remove('open')
-            this.removeAttribute('open')
-            els.forEach(el => el?.classList.remove('open'))
-            unlockBodyScrolling(document.body)
-            this.emit('close')
-        } else {
-            // open
-            document.body.classList.add('hamburging')
-            this.classList.add('open')
-            this.setAttribute('open', '')
-            els.forEach(el => el?.classList.add('open'))
-            lockBodyScrolling(document.body)
-            this.emit('open')
-        }
+    /**
+     * The inner button.
+     */
+    get button ():HTMLButtonElement|null {
+        return this.querySelector('button')
+    }
+
+    /**
+     * The element named by the `controls` attribute.
+     */
+    get menu ():HTMLElement|null {
+        const id = this.getAttribute('controls')
+        if (!id) return null
+        const root = this.getRootNode() as Document|ShadowRoot
+        return root.getElementById(id)
     }
 
     _getElements () {
@@ -51,46 +63,94 @@ export class HamburgerTwo extends WebComponent.create('hamburger-two') {
     }
 
     burgerIcon:null|string = null
-    transition:number = 200
-
-    constructor () {
-        super()
-
-        const transition = this.getAttribute('transition')
-        if (transition) {
-            this.transition = parseInt(transition)
-        }
-
-        this.isOpen = this.hasAttribute('open')
-    }
 
     /**
-     * The work happens in the setter method.
+     * Toggle the menu from user input. On open, emit the event first,
+     * so the app can show the menu, then move focus into the menu.
      */
-    hamburgle (ev?:Event) {
-        if (ev) ev.preventDefault()
-        this.isOpen = !(this.isOpen)
+    hamburgle () {
+        const opening = !this.isOpen
+        this.isOpen = opening
+        if (opening) {
+            const first = this.menu?.querySelector<HTMLElement>(FOCUSABLE)
+            first?.focus()
+        }
     }
 
     /**
      * Handle 'open' attribute changes
      * @see {@link https://gomakethings.com/how-to-detect-when-attributes-change-on-a-web-component/#organizing-your-code Go Make Things article}
      *
-     * The work is done in the getter & setter methods.
-     *
      * @param  {string} oldValue The old attribute value
      * @param  {string} newValue The new attribute value
      */
-    handleChange_open (oldValue:string, newValue:string) {
-        if (newValue === oldValue) return
+    handleChange_open (oldValue:string|null, newValue:string|null) {
+        if ((oldValue === null) === (newValue === null)) return
+        // connectedCallback syncs the state
+        if (!this.isConnected) return
 
-        if (newValue === null) {
-            // closed
-            this.isOpen = false
+        this._sync()
+        this.emit(newValue === null ? 'close' : 'open')
+    }
+
+    handleChange_label () {
+        this._syncButton()
+    }
+
+    handleChange_controls () {
+        this._syncButton()
+    }
+
+    /**
+     * Apply the open or closed state to the DOM.
+     */
+    _sync () {
+        const isOpen = this.isOpen
+        document.body.classList.toggle('hamburging', isOpen)
+        this.classList.toggle('open', isOpen)
+        this._getElements().forEach(el => el?.classList.toggle('open', isOpen))
+        if (isOpen) {
+            lockBodyScrolling(document.body)
         } else {
-            // open
-            this.isOpen = true
+            unlockBodyScrolling(document.body)
         }
+        this._syncButton()
+    }
+
+    _syncButton () {
+        const button = this.button
+        if (!button) return
+        button.setAttribute(
+            'aria-label',
+            this.getAttribute('label') || HamburgerTwo.DEFAULT_LABEL
+        )
+        button.setAttribute('aria-expanded', String(this.isOpen))
+        const controls = this.getAttribute('controls')
+        if (controls) {
+            button.setAttribute('aria-controls', controls)
+        } else {
+            button.removeAttribute('aria-controls')
+        }
+    }
+
+    _onKeydown = (ev:KeyboardEvent) => {
+        if (ev.key !== 'Escape' || !this.isOpen) return
+        this.isOpen = false
+        this.button?.focus()
+    }
+
+    /**
+     * Close when focus moves from the menu to somewhere outside of both
+     * the menu and this element.
+     */
+    _onFocusout = (ev:FocusEvent) => {
+        if (!this.isOpen) return
+        const menu = this.menu
+        const from = ev.target as Node
+        const to = ev.relatedTarget as Node|null
+        if (!menu || !to || !menu.contains(from)) return
+        if (menu.contains(to) || this.contains(to)) return
+        this.isOpen = false
     }
 
     /**
@@ -98,35 +158,45 @@ export class HamburgerTwo extends WebComponent.create('hamburger-two') {
      */
     connectedCallback () {
         this.render()
-        this.addEventListener('click', ev => {
-            ev.preventDefault()
-            this.hamburgle()
-        })
+        if (this.isOpen) this._sync()
+        document.addEventListener('keydown', this._onKeydown)
+        document.addEventListener('focusout', this._onFocusout)
+    }
+
+    disconnectedCallback () {
+        document.removeEventListener('keydown', this._onKeydown)
+        document.removeEventListener('focusout', this._onFocusout)
+        if (this.isOpen) {
+            document.body.classList.remove('hamburging')
+            unlockBodyScrolling(document.body)
+        }
     }
 
     render () {
         const isOpen = this.isOpen
 
-        this.burgerIcon = `<label class="burger" for="burger-checkbox">
-            <button name="open-nav">
-                <div class="container top">
-                    <div class="line top"></div>
-                </div>
-                <div class="container middle">
-                    <div class="line middle"></div>
-                </div>
-                <div class="container bottom">
-                    <div class="line bottom"></div>
-                </div>
+        this.burgerIcon = `<div class="burger">
+            <button type="button" name="open-nav">
+                <span class="container top">
+                    <span class="line top"></span>
+                </span>
+                <span class="container middle">
+                    <span class="line middle"></span>
+                </span>
+                <span class="container bottom">
+                    <span class="line bottom"></span>
+                </span>
             </button>
-        </label>`
+        </div>`
 
         this.innerHTML = (`<div class="hamburger-wrapper">
             <div class="${'hamburger' + (isOpen ? ' open' : '')}">
-                <input type="checkbox" id="burger-checkbox" checked=${isOpen} />
                 ${this.burgerIcon}
             </div>
         </div>`)
+
+        this._syncButton()
+        this.button!.addEventListener('click', () => this.hamburgle())
     }
 }
 
